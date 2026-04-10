@@ -105,7 +105,7 @@ require_once __DIR__ . "/../includes/header.php";
                 <label class="container">
                     <input type="checkbox" name="newsletter">
                     <div class="checkmark"></div>
-                    Voglio ricevere email promozionali
+                    Voglio ricevere comunicazioni via email
                 </label>
 
                 <label class="container">
