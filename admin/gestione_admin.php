@@ -180,6 +180,23 @@ if (isset($_POST['update'])) {
     }
 }
 
+if (isset($_GET['edit'])) {
+    $id = intval($_GET['edit']);
+    $stmt = $conn->prepare("SELECT username FROM utenti_admin WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    echo '<form method="POST" enctype="multipart/form-data" action="submit_rimessaggio.php">';
+    echo '<input type="hidden" name="id" value="' . $id . '">';
+    echo '<label for="ricevuta_pagamento">Carica ricevuta:</label>';
+    echo '<input type="file" name="ricevuta_pagamento" accept="application/pdf">';
+    echo '<button type="submit" name="upload_ricevuta">Carica ricevuta</button>';
+    if (!empty($user['ricevuta_pagamento'])) {
+        echo '<a href="../cliente/view_file.php?type=ricevute&file=' . $user['ricevuta_pagamento'] . '" target="_blank">Visualizza ricevuta</a>';
+    }
+    echo '</form>';
+}
+
 $pageTitle = "Gestione Admin - Moki SUP Club";
 require_once __DIR__ . "/../includes/header.php";
 ?>

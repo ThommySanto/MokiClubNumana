@@ -41,13 +41,47 @@ if (isset($_POST['update'])) {
     $valori = [];
     $tipi = "";
 
-    // Se vengono modificati acconto o saldo_totale ricalcoliamo rimanente
-if (isset($_POST['acconto']) && isset($_POST['saldo_totale'])) {
-    $acconto = floatval($_POST['acconto']);
-    $saldo_totale = floatval($_POST['saldo_totale']);
+    // Gestione caricamento ricevuta
+    if (!empty($_FILES['ricevuta_pagamento']) && $_FILES['ricevuta_pagamento']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['ricevuta_pagamento'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
 
-    $_POST['rimanente'] = $saldo_totale - $acconto;
-}
+        if ($mime === 'application/pdf') {
+            $uploadDir = creaCartellaPerAnno('cliente/uploads/ricevute');
+            $fileName = $id . '_ricevuta_' . time() . '.pdf';
+            $filePath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($file['tmp_name'], $filePath)) {
+                chmod($filePath, 0644);
+                $relativePath = 'cliente/uploads/ricevute/' . date('Y') . '/' . $fileName;
+
+                // Elimina vecchio file se esiste
+                $stmt = $conn->prepare("SELECT ricevuta_pagamento FROM rimessaggi WHERE id = ?");
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($result->num_rows > 0) {
+                    $oldFile = $result->fetch_assoc()['ricevuta_pagamento'];
+                    if (!empty($oldFile)) {
+                        $oldFilePath = __DIR__ . '/../' . $oldFile;
+                        if (file_exists($oldFilePath)) {
+                            unlink($oldFilePath);
+                        }
+                    }
+                }
+
+                $campi[] = "ricevuta_pagamento = ?";
+                $valori[] = $relativePath;
+                $tipi .= "s";
+            } else {
+                $errore = "Errore durante il caricamento della ricevuta.";
+            }
+        } else {
+            $errore = "Il file caricato non è un PDF valido.";
+        }
+    }
 
     foreach ($_POST as $campo => $valore) {
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $campo)) {
@@ -56,28 +90,22 @@ if (isset($_POST['acconto']) && isset($_POST['saldo_totale'])) {
 
         $campi[] = "$campo = ?";
         $valori[] = $valore;
-        $tipi .= "s"; // trattiamo tutto come stringa
+        $tipi .= "s";
     }
 
-    if (empty($campi)) {
-        $errore = "Nessun campo valido da aggiornare";
-    } else {
+    if (!empty($campi)) {
+        $valori[] = $id;
+        $tipi .= "i";
 
-    $valori[] = $id;
-    $tipi .= "i";
+        $sql = "UPDATE rimessaggi SET " . implode(", ", $campi) . " WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($tipi, ...$valori);
 
-    $sql = "UPDATE rimessaggi SET " . implode(", ", $campi) . " WHERE id = ?";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param($tipi, ...$valori);
-
-    if ($stmt->execute()) {
-        $successo = "Rimessaggio aggiornato con successo";
-        unset($rimessaggio);
-    } else {
-        error_log('Errore update admin/rimessaggi: ' . $stmt->error);
-        $errore = "Errore durante l'aggiornamento";
-    }
+        if ($stmt->execute()) {
+            $successo = "Rimessaggio aggiornato con successo.";
+        } else {
+            $errore = "Errore durante l'aggiornamento del rimessaggio.";
+        }
     }
 }
 
@@ -187,47 +215,38 @@ include "../includes/header.php";
                 <?= htmlspecialchars($rimessaggio['nome'] . ' ' . $rimessaggio['cognome']) ?>
             </h2>
 
-            <form method="POST" class="login-form">
+            <form method="POST" enctype="multipart/form-data" class="login-form">
                 <?= app_csrf_input() ?>
                 <input type="hidden" name="update_id" value="<?php echo $rimessaggio['id']; ?>">
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                     <?php
-                    $enumFields = [
-                        "tipo_documento" => ["codice fiscale", "carta identità", "patente", "passaporto"],
-                        "adulto_kid" => ["Adulto", "Kid"],
-                        "tipo_rimessaggio" => ["Settimanale", "Mensile", "Annuale"],
-                        "sacca" => ["Si", "No"]
-                    ];
-
                     foreach ($rimessaggio as $campo => $valore):
-                        if ($campo == 'id')
+                        if ($campo == 'id' || $campo == 'ricevuta_pagamento') {
                             continue;
+                        }
                         ?>
                         <div class="form-group" style="margin-bottom: 20px;">
                             <label
                                 style="margin-left: 5px; color: #9499b7; font-size: 12px;"><?php echo strtoupper(str_replace('_', ' ', $campo)); ?></label>
                             <div class="neu-input" style="box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;">
-                                <?php if (isset($enumFields[$campo])): ?>
-                                    <select name="<?php echo $campo; ?>"
-                                        style="width: 100%; background: transparent; border: none; padding: 15px 20px; outline: none; color: #3d4468; cursor: pointer;">
-                                        <?php foreach ($enumFields[$campo] as $opzione): ?>
-                                            <option value="<?php echo $opzione; ?>" <?php if ($valore == $opzione)
-                                                   echo "selected"; ?>>
-                                                <?php echo $opzione; ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                <?php elseif (strpos($campo, 'data') !== false): ?>
-                                    <input type="date" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($valore); ?>"
-                                        style="width: 100%; border: none; background: transparent; padding: 15px 20px; outline: none; color: #3d4468;">
-                                <?php else: ?>
-                                    <input type="text" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($valore); ?>"
-                                        style="width: 100%; border: none; background: transparent; padding: 15px 20px; outline: none; color: #3d4468;">
-                                <?php endif; ?>
+                                <input type="text" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($valore); ?>"
+                                    style="width: 100%; border: none; background: transparent; padding: 15px 20px; outline: none; color: #3d4468;">
                             </div>
                         </div>
                     <?php endforeach; ?>
+
+                    <!-- Campo per caricamento ricevuta -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="margin-left: 5px; color: #9499b7; font-size: 12px;">RICEVUTA PAGAMENTO</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="file" name="ricevuta_pagamento" accept="application/pdf">
+                            <?php if (!empty($rimessaggio['ricevuta_pagamento'])): ?>
+                                <a href="../cliente/view_file.php?type=ricevute&file=<?= urlencode($rimessaggio['ricevuta_pagamento']) ?>"
+                                   target="_blank" class="neu-button mini-btn" style="text-decoration: none;">Visualizza Ricevuta</a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
 
                 <div style="margin-top: 30px; display: flex; gap: 20px;">

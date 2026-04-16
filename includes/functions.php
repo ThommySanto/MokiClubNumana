@@ -8,11 +8,11 @@ require_once dirname(__DIR__) . '/security_headers.php';
  * @return string Il percorso completo della directory creata.
  */
 function creaCartellaPerAnno($baseDir) {
-    $anno = date("Y");
+    $anno = date('Y');
     $directory = __DIR__ . "/../$baseDir/$anno/";
 
     if (!file_exists($directory)) {
-        mkdir($directory, 0777, true);
+        mkdir($directory, 0755, true);
     }
 
     return $directory;
