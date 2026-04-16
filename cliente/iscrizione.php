@@ -115,10 +115,13 @@ require_once __DIR__ . "/../includes/header.php";
                 </label>
 
                 <label class="container">
-                    <input type="checkbox" name="privacy" required>
+                    <input type="checkbox" name="privacy" id="privacy-checkbox" disabled>
                     <div class="checkmark"></div>
-                    Accetto la privacy policy
+                    Accetto le condizioni della privacy policy
                 </label>
+                <p style="font-size: smaller;">
+                    <a href="../includes/privacy.pdf" target="_blank" id="privacy-link">Leggi le privacy policy</a>
+                </p>
             </div>
 
             <!-- FIRMA -->
@@ -149,6 +152,34 @@ require_once __DIR__ . "/../includes/header.php";
                     </div>
                 </div>
             </div>
+
+            <!-- Visualizzazione della firma caricata con icona accanto -->
+<?php if (!empty($firma_url)): ?>
+    <div class="form-group" style="margin-top: 20px; display: flex; align-items: center; gap: 10px;">
+        <label style="color: #3d4468; font-size: 14px; font-weight: bold;">Firma Caricata</label>
+        <a href="/<?= htmlspecialchars($firma_url) ?>" target="_blank"
+            style="text-decoration: none; display: flex; align-items: center;">
+            <img src="/assets/img/icon-eye.svg" alt="Visualizza" style="width: 20px; height: 20px;">
+        </a>
+    </div>
+<?php endif; ?>
+
+            <!-- Input per caricamento file PDF con icona accanto -->
+<div class="form-group" style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+    <label style="color: #3d4468; font-size: 14px; font-weight: bold;">Carica Ricevuta</label>
+    <div style="position: relative;">
+        <label for="nuovo_file_pdf" class="neu-button mini-btn" style="cursor: pointer;">
+            Scegli File
+        </label>
+        <input type="file" id="nuovo_file_pdf" name="nuovo_file_pdf" accept="application/pdf" style="display: none;">
+    </div>
+    <?php if (!empty($rimessaggio['ricevuta_pagamento'])): ?>
+        <a href="/<?= htmlspecialchars($rimessaggio['ricevuta_pagamento']) ?>" target="_blank"
+            style="text-decoration: none; display: flex; align-items: center;">
+            <img src="/assets/img/icon-eye.svg" alt="Visualizza" style="width: 20px; height: 20px;">
+        </a>
+    <?php endif; ?>
+</div>
 
             <input type="hidden" name="firma_base64" id="firma_base64">
 
@@ -280,3 +311,24 @@ require_once __DIR__ . "/../includes/header.php";
 </script>
 
 <?php require_once __DIR__ . "/../includes/footer.php"; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const privacyLink = document.getElementById('privacy-link');
+        const privacyCheckbox = document.getElementById('privacy-checkbox');
+        const form = document.querySelector('form');
+
+        privacyLink.addEventListener('click', function (event) {
+            event.preventDefault(); // Previene il comportamento predefinito temporaneamente
+            window.open(privacyLink.href, '_blank'); // Apre il PDF in una nuova scheda
+            privacyCheckbox.disabled = false; // Abilita la checkbox
+        });
+
+        form.addEventListener('submit', function (event) {
+            if (!privacyCheckbox.checked) {
+                event.preventDefault();
+                alert('Devi accettare le condizioni della privacy policy per inviare il modulo.');
+            }
+        });
+    });
+</script>

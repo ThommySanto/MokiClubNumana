@@ -3,6 +3,7 @@ require_once dirname(__DIR__) . '/security_headers.php';
 require_once __DIR__ . '/../includes/security_utils.php';
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../includes/auth_check.php";
+require_once __DIR__ . '/../includes/functions.php';
 
 $successo = "";
 $errore = "";
@@ -100,7 +101,6 @@ if (isset($_POST['update'])) {
             $errore = "Errore nell'aggiornare l'utente";
         }
     }
-    }
 }
 
 /* ---------------- CREATE ---------------- */
@@ -125,6 +125,57 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['update'])) {
             $successo = "Utente aggiunto con successo";
         } else {
             $errore = "Errore nell'aggiungere l'utente";
+        }
+    }
+}
+
+<?php
+// Gestione caricamento file
+if (isset($_POST['update'])) {
+    app_require_csrf();
+
+    $id = intval($_POST['update_id']);
+    $username = trim($_POST['update_username']);
+    $password = $_POST['update_password'];
+
+    if ($id !== 0) {
+        $file_path = '';
+
+        if (!empty($_FILES['file_ricevuta']['name'])) {
+            $upload_dir = creaCartellaPerAnno('cliente/uploads/ricevute');
+            $file_name = basename($_FILES['file_ricevuta']['name']);
+            $file_path = $upload_dir . $file_name;
+
+            // Controllo tipo file
+            $file_type = mime_content_type($_FILES['file_ricevuta']['tmp_name']);
+            if ($file_type !== 'application/pdf') {
+                $errore = "Il file deve essere un PDF.";
+            } else {
+                // Sposta il file nella directory
+                if (!move_uploaded_file($_FILES['file_ricevuta']['tmp_name'], $file_path)) {
+                    $errore = "Errore durante il caricamento del file.";
+                } else {
+                    // Aggiorna il database con il percorso del file
+                    $stmt = $conn->prepare("UPDATE utenti_admin SET ricevuta_pagamento = ? WHERE id = ?");
+                    $stmt->bind_param("si", $file_name, $id);
+                    $stmt->execute();
+                }
+            }
+        }
+
+        if (!empty($password)) {
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("UPDATE utenti_admin SET username = ?, password = ? WHERE id = ?");
+            $stmt->bind_param("ssi", $username, $hashed_password, $id);
+        } else {
+            $stmt = $conn->prepare("UPDATE utenti_admin SET username = ? WHERE id = ?");
+            $stmt->bind_param("si", $username, $id);
+        }
+
+        if ($stmt->execute()) {
+            $successo = "Utente aggiornato con successo.";
+        } else {
+            $errore = "Errore nell'aggiornare l'utente.";
         }
     }
 }
@@ -180,7 +231,7 @@ require_once __DIR__ . "/../includes/header.php";
             <?php if (isset($edit_id)): ?>
                 <div class="edit-account-panel">
                     <label class="search-label-text">✏️ Modifica: <?= htmlspecialchars($edit_username) ?></label>
-                    <form method="POST" style="display: flex; gap: 15px; flex-direction: column;">
+                    <form method="POST" enctype="multipart/form-data" style="display: flex; gap: 15px; flex-direction: column;">
                         <?= app_csrf_input() ?>
                         <input type="hidden" name="update_id" value="<?php echo $edit_id; ?>">
                         <input type="text" name="update_username" value="<?php echo htmlspecialchars($edit_username); ?>"
@@ -188,6 +239,10 @@ require_once __DIR__ . "/../includes/header.php";
                                 echo 'readonly'; ?>>
                         <input type="password" name="update_password"
                             placeholder="Nuova password (lascia vuoto per non cambiare)">
+
+                        <!-- Campo per caricamento file -->
+                        <label for="file_ricevuta">Carica ricevuta pagamento (PDF):</label>
+                        <input type="file" name="file_ricevuta" id="file_ricevuta" accept="application/pdf">
 
                         <div style="display: flex; gap: 10px;">
                             <button type="submit" name="update" class="mini-btn" style="flex: 1;">Aggiorna</button>
@@ -251,6 +306,10 @@ require_once __DIR__ . "/../includes/header.php";
             </tbody>
         </table>
     </div>
+
+    <?php if (!empty($user['ricevuta_pagamento'])): ?>
+        <a href="../cliente/view_file.php?type=ricevute&file=<?= urlencode($user['ricevuta_pagamento']) ?>" target="_blank" class="mini-btn" style="text-decoration: none;">Visualizza Ricevuta</a>
+    <?php endif; ?>
 
     <style>
         .admin-management-grid {

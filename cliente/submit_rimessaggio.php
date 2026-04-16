@@ -89,25 +89,31 @@ if (!empty($_POST['firma'])) {
 }
 
 // =============================
-// UPLOAD RICEVUTA
+// UPLOAD RICEVUTA (Adattato dalla logica delle firme)
 // =============================
 $ricevuta_path = NULL;
 
-if (!empty($_FILES["ricevuta_pagamento"]["name"])) {
+if (!empty($_FILES['ricevuta_pagamento']['name'])) {
+    $anno = date('Y');
+    $directory = __DIR__ . '/uploads/ricevute/' . $anno . '/';
 
-    $anno = date("Y");
-    $directory = __DIR__ . "/uploads/ricevute/" . $anno . "/";
-
+    // Crea la directory se non esiste
     if (!file_exists($directory)) {
         mkdir($directory, 0777, true);
     }
 
-    $file_name = strtolower($nome . "_" . $cognome . "_" . time() . "_" . basename($_FILES["ricevuta_pagamento"]["name"]));
+    // Genera un nome unico per il file
+    $file_name = strtolower($nome . '_' . $cognome . '_' . time() . '_' . basename($_FILES['ricevuta_pagamento']['name']));
     $target = $directory . $file_name;
 
-    if (move_uploaded_file($_FILES["ricevuta_pagamento"]["tmp_name"], $target)) {
-        // Percorso relativo alla root per il DB
-        $ricevuta_path = "cliente/uploads/ricevute/" . $anno . "/" . $file_name;
+    // Sposta il file nella directory
+    if (move_uploaded_file($_FILES['ricevuta_pagamento']['tmp_name'], $target)) {
+        // Percorso relativo per il database
+        $ricevuta_path = 'cliente/uploads/ricevute/' . $anno . '/' . $file_name;
+    } else {
+        error_log('Errore durante il caricamento della ricevuta.');
+        http_response_code(500);
+        exit('Errore durante il caricamento della ricevuta.');
     }
 }
 
@@ -179,90 +185,14 @@ $stmt->bind_param(
 
 if ($stmt->execute()) {
 
-    if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        require_once __DIR__ . '/../includes/mailer.php';
-        require_once __DIR__ . '/../includes/email_templates/rimessaggio_template.php';
-        $html = templateRimessaggio($nome);
-        inviaEmail(
-            'rimessaggio',
-            $email,
-            'Rinnovo Rimessaggio 2026 - MOKI CLUB NUMANA',
-            $html,
-            __DIR__ . '/../assets/img/MCN_26_ok.pdf'
-        );
-    }
-
-    // Pagina di Successo Decorata
-    $pageTitle = "Rimessaggio Salvato";
-    include __DIR__ . "/../includes/header.php";
-    ?>
-    <main class="admin-container" style="text-align: center; padding: 100px 20px;">
-        <div class="success-card"
-            style="background: white; padding: 50px; border-radius: 30px; box-shadow: var(--shadow-lg); max-width: 600px; margin: 0 auto; border: 1px solid var(--glass-border); backdrop-filter: blur(10px);">
-            <div class="success-icon" style="font-size: 80px; margin-bottom: 20px; animation: bounce 2s infinite;">✅</div>
-            <h1 style="color: var(--primary-color); margin-bottom: 15px;">Rimessaggio Confermato!</h1>
-            <p style="font-size: 18px; color: #666; margin-bottom: 30px;">
-                Grazie <strong><?php echo htmlspecialchars($nome); ?></strong>, il tuo contratto di rimessaggio è stato
-                salvato correttamente.<br>
-                Ti abbiamo inviato un'email con il riepilogo all'indirizzo <?php echo htmlspecialchars($email); ?>.
-            </p>
-            <p style="font-size: 14px; color: #999;">Verrai reindirizzato alla home tra pochi secondi...</p>
-            <div class="loading-bar"
-                style="width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 20px; overflow: hidden;">
-                <div class="loading-progress"
-                    style="width: 0%; height: 100%; background: var(--secondary-color); animation: progress 5s linear forwards;">
-                </div>
-            </div>
-            <a href="/index.php" class="btn-primary"
-                style="display: inline-block; margin-top: 30px; text-decoration: none;">Torna subito alla Home</a>
-        </div>
-    </main>
-
-    <style>
-        @keyframes bounce {
-
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translateY(0);
-            }
-
-            40% {
-                transform: translateY(-20px);
-            }
-
-            60% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes progress {
-            from {
-                width: 0%;
-            }
-
-            to {
-                width: 100%;
-            }
-        }
-    </style>
-
-    <script>
-        setTimeout(function () {
-            window.location.href = '/index.php';
-        }, 5000);
-    </script>
-    <?php
-    include __DIR__ . "/../includes/footer.php";
+    // Conferma inserimento nel database
+    header("Location: ../success.php?msg=Rimessaggio salvato con successo");
+    exit();
 
 } else {
-    $pageTitle = "Errore Rimessaggio";
-    include __DIR__ . "/../includes/header.php";
-    error_log('Errore submit_rimessaggio: ' . $stmt->error);
-    echo "<div class='error-message' style='margin: 50px auto; max-width: 600px;'>Errore durante l'invio. Riprova più tardi.</div>";
-    include __DIR__ . "/../includes/footer.php";
+    error_log('Errore execute submit_rimessaggio: ' . $stmt->error);
+    http_response_code(500);
+    exit('Errore durante il salvataggio del rimessaggio.');
 }
 
 $stmt->close();

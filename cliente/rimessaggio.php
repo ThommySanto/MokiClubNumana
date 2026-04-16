@@ -118,12 +118,6 @@ require_once __DIR__ . "/../includes/header.php";
                 <input type="date" name="data_versamento_acconto" autocomplete="off">
             </div>
 
-            <!-- RICEVUTA -->
-            <div class="form-group">
-                <label>Ricevuta di pagamento</label>
-                <input type="file" name="ricevuta_pagamento">
-            </div>
-
             <!-- FIRMA -->
             <div class="signature-section" style="background: transparent; box-shadow: none; border: none; padding: 0;">
                 <label style="margin-bottom: 15px; display: block;">Firma Digitale</label>
@@ -151,6 +145,18 @@ require_once __DIR__ . "/../includes/header.php";
                             style="width: auto !important; padding: 15px 40px !important; background: #9499b7; color: white;">Chiudi</button>
                     </div>
                 </div>
+            </div>
+
+            <!-- Rimosso duplicato della checkbox privacy e corretto il comportamento -->
+            <div class="checkbox-group">
+                <label class="container">
+                    <input type="checkbox" name="privacy" id="privacy-checkbox" disabled>
+                    <div class="checkmark"></div>
+                    Accetto le condizioni della privacy policy
+                </label>
+                <p style="font-size: smaller;">
+                    <a href="../includes/privacy.pdf" target="_blank" id="privacy-link">Leggi le privacy policy</a>
+                </p>
             </div>
 
             <input type="hidden" name="firma" id="firma">
@@ -283,3 +289,24 @@ require_once __DIR__ . "/../includes/header.php";
     });
 </script>
 <?php require_once __DIR__ . "/../includes/footer.php"; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const privacyLink = document.getElementById('privacy-link');
+        const privacyCheckbox = document.getElementById('privacy-checkbox');
+        const form = document.querySelector('form');
+
+        privacyLink.addEventListener('click', function (event) {
+            event.preventDefault(); // Previene il comportamento predefinito temporaneamente
+            window.open(privacyLink.href, '_blank'); // Apre il PDF in una nuova scheda
+            privacyCheckbox.disabled = false; // Abilita la checkbox
+        });
+
+        form.addEventListener('submit', function (event) {
+            if (!privacyCheckbox.checked) {
+                event.preventDefault();
+                alert('Devi accettare le condizioni della privacy policy per inviare il modulo.');
+            }
+        });
+    });
+</script>
