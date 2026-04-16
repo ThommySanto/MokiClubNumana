@@ -40,6 +40,28 @@ if (isset($_POST['update'])) {
     $campi = [];
     $valori = [];
     $tipi = "";
+    $ricevuta_path = null;
+    $uploadError = null;
+
+    if (!empty($_FILES['ricevuta_pagamento']['name'])) {
+        $anno = date('Y');
+        $directory = __DIR__ . '/../cliente/uploads/ricevute/' . $anno . '/';
+
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        $nome_base = ($rimessaggio['nome'] ?? 'rimessaggio') . '_' . ($rimessaggio['cognome'] ?? 'admin') . '_' . time() . '_' . basename($_FILES['ricevuta_pagamento']['name']);
+        $file_name = strtolower(preg_replace('/[^a-zA-Z0-9._-]+/', '_', $nome_base));
+        $target = $directory . $file_name;
+
+        if (move_uploaded_file($_FILES['ricevuta_pagamento']['tmp_name'], $target)) {
+            $ricevuta_path = 'cliente/uploads/ricevute/' . $anno . '/' . $file_name;
+        } else {
+            error_log('Errore durante il caricamento della ricevuta in admin/rimessaggi: ' . ($rimessaggio['id'] ?? 'n/a'));
+            $uploadError = 'Errore durante il caricamento della ricevuta.';
+        }
+    }
 
     // Se vengono modificati acconto o saldo_totale ricalcoliamo rimanente
 if (isset($_POST['acconto']) && isset($_POST['saldo_totale'])) {
@@ -49,35 +71,45 @@ if (isset($_POST['acconto']) && isset($_POST['saldo_totale'])) {
     $_POST['rimanente'] = $saldo_totale - $acconto;
 }
 
-    foreach ($_POST as $campo => $valore) {
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $campo)) {
-            continue;
+    if ($uploadError) {
+        $errore = $uploadError;
+    } else {
+        foreach ($_POST as $campo => $valore) {
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $campo)) {
+                continue;
+            }
+
+            $campi[] = "$campo = ?";
+            $valori[] = $valore;
+            $tipi .= "s"; // trattiamo tutto come stringa
         }
 
-        $campi[] = "$campo = ?";
-        $valori[] = $valore;
-        $tipi .= "s"; // trattiamo tutto come stringa
-    }
+        if (!empty($ricevuta_path)) {
+            $campi[] = "ricevuta_pagamento = ?";
+            $valori[] = $ricevuta_path;
+            $tipi .= "s";
+        }
 
-    if (empty($campi)) {
-        $errore = "Nessun campo valido da aggiornare";
-    } else {
+        if (empty($campi)) {
+            $errore = "Nessun campo valido da aggiornare";
+        } else {
 
-    $valori[] = $id;
-    $tipi .= "i";
+        $valori[] = $id;
+        $tipi .= "i";
 
-    $sql = "UPDATE rimessaggi SET " . implode(", ", $campi) . " WHERE id = ?";
+        $sql = "UPDATE rimessaggi SET " . implode(", ", $campi) . " WHERE id = ?";
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param($tipi, ...$valori);
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($tipi, ...$valori);
 
-    if ($stmt->execute()) {
-        $successo = "Rimessaggio aggiornato con successo";
-        unset($rimessaggio);
-    } else {
-        error_log('Errore update admin/rimessaggi: ' . $stmt->error);
-        $errore = "Errore durante l'aggiornamento";
-    }
+        if ($stmt->execute()) {
+            $successo = "Rimessaggio aggiornato con successo";
+            unset($rimessaggio);
+        } else {
+            error_log('Errore update admin/rimessaggi: ' . $stmt->error);
+            $errore = "Errore durante l'aggiornamento";
+        }
+        }
     }
 }
 
@@ -187,7 +219,7 @@ include "../includes/header.php";
                 <?= htmlspecialchars($rimessaggio['nome'] . ' ' . $rimessaggio['cognome']) ?>
             </h2>
 
-            <form method="POST" class="login-form">
+            <form method="POST" enctype="multipart/form-data" class="login-form">
                 <?= app_csrf_input() ?>
                 <input type="hidden" name="update_id" value="<?php echo $rimessaggio['id']; ?>">
 
@@ -201,7 +233,7 @@ include "../includes/header.php";
                     ];
 
                     foreach ($rimessaggio as $campo => $valore):
-                        if ($campo == 'id')
+                        if (in_array($campo, ['id', 'created_at', 'ricevuta_pagamento']))
                             continue;
                         ?>
                         <div class="form-group" style="margin-bottom: 20px;">
@@ -228,6 +260,25 @@ include "../includes/header.php";
                             </div>
                         </div>
                     <?php endforeach; ?>
+                </div>
+
+                <div class="form-group" style="margin-top: 10px; margin-bottom: 20px;">
+                    <label style="margin-left: 5px; color: #9499b7; font-size: 12px;">RICEVUTA PAGAMENTO</label>
+                    <div class="neu-input" style="box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff; padding: 15px 20px;">
+                        <?php if (!empty($rimessaggio['ricevuta_pagamento'])): ?>
+                            <div style="margin-bottom: 12px;">
+                                <a href="/<?= htmlspecialchars($rimessaggio['ricevuta_pagamento']) ?>"
+                                    target="_blank" style="text-decoration: none; color: #3d4468; font-weight: bold;">
+                                    Visualizza ricevuta attuale
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                        <input type="file" name="ricevuta_pagamento" accept=".pdf,.jpg,.jpeg,.png"
+                            style="width: 100%; border: none; background: transparent; padding: 0; outline: none; color: #3d4468;">
+                        <small style="display: block; margin-top: 8px; color: #9499b7;">
+                            Carica un nuovo file solo se vuoi sostituire la ricevuta esistente.
+                        </small>
+                    </div>
                 </div>
 
                 <div style="margin-top: 30px; display: flex; gap: 20px;">
