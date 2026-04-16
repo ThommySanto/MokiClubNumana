@@ -1,0 +1,4 @@
+# Abilita l'accesso ai file PHP nella directory
+<FilesMatch "\.php$">
+    Require all granted
+</FilesMatch>

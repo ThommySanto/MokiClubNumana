@@ -102,6 +102,7 @@ if (isset($_POST['update'])) {
         }
     }
 }
+}
 
 /* ---------------- CREATE ---------------- */
 if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['update'])) {
@@ -129,7 +130,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['update'])) {
     }
 }
 
-<?php
 // Gestione caricamento file
 if (isset($_POST['update'])) {
     app_require_csrf();

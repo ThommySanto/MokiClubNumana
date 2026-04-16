@@ -164,22 +164,7 @@ require_once __DIR__ . "/../includes/header.php";
     </div>
 <?php endif; ?>
 
-            <!-- Input per caricamento file PDF con icona accanto -->
-<div class="form-group" style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-    <label style="color: #3d4468; font-size: 14px; font-weight: bold;">Carica Ricevuta</label>
-    <div style="position: relative;">
-        <label for="nuovo_file_pdf" class="neu-button mini-btn" style="cursor: pointer;">
-            Scegli File
-        </label>
-        <input type="file" id="nuovo_file_pdf" name="nuovo_file_pdf" accept="application/pdf" style="display: none;">
-    </div>
-    <?php if (!empty($rimessaggio['ricevuta_pagamento'])): ?>
-        <a href="/<?= htmlspecialchars($rimessaggio['ricevuta_pagamento']) ?>" target="_blank"
-            style="text-decoration: none; display: flex; align-items: center;">
-            <img src="/assets/img/icon-eye.svg" alt="Visualizza" style="width: 20px; height: 20px;">
-        </a>
-    <?php endif; ?>
-</div>
+
 
             <input type="hidden" name="firma_base64" id="firma_base64">
 
