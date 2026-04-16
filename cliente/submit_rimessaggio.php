@@ -197,4 +197,48 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>
+
+if (isset($_POST['upload_ricevuta'])) {
+    app_require_csrf();
+    $id = intval($_POST['id']);
+
+    if ($id > 0 && isset($_FILES['ricevuta_pagamento'])) {
+        $file = $_FILES['ricevuta_pagamento'];
+
+        if ($file['error'] === UPLOAD_ERR_OK && $file['size'] <= 8 * 1024 * 1024) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $file['tmp_name']);
+            finfo_close($finfo);
+
+            if ($mime === 'application/pdf') {
+                $stmt = $conn->prepare("SELECT ricevuta_pagamento FROM rimessaggi WHERE id = ?");
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $vecchioFile = $row['ricevuta_pagamento'];
+
+                    $nuovoFile = gestisciUploadRicevuta($file, 'cliente/uploads/ricevute', $id);
+
+                    if ($nuovoFile) {
+                        $stmt = $conn->prepare("UPDATE rimessaggi SET ricevuta_pagamento = ? WHERE id = ?");
+                        $stmt->bind_param("si", $nuovoFile, $id);
+
+                        if ($stmt->execute()) {
+                            if (!empty($vecchioFile)) {
+                                eliminaFile(__DIR__ . '/../cliente/uploads/ricevute/' . $vecchioFile);
+                            }
+                            header('Location: ../admin/gestione_admin.php?ok=1');
+                            exit;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    header('Location: ../admin/gestione_admin.php?error=1');
+    exit;
+}

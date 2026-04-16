@@ -17,3 +17,23 @@ function creaCartellaPerAnno($baseDir) {
 
     return $directory;
 }
+
+function eliminaFile($filePath) {
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+}
+
+function gestisciUploadRicevuta($file, $uploadDir, $id) {
+    $anno = date('Y');
+    $directory = creaCartellaPerAnno($uploadDir);
+    $fileName = $id . '_' . time() . '.pdf';
+    $filePath = $directory . $fileName;
+
+    if (move_uploaded_file($file['tmp_name'], $filePath)) {
+        chmod($filePath, 0644);
+        return $anno . '/' . $fileName;
+    }
+
+    return false;
+}

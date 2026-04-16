@@ -18,8 +18,15 @@ if (!array_key_exists($type, $baseDirs)) {
     die('Tipo di file non valido.');
 }
 
+// Ottieni il nome del file
+$file = $_GET['file'] ?? '';
+
+if (!preg_match('/^[a-zA-Z0-9_\/]+\.pdf$/', $file)) {
+    die('Nome file non valido.');
+}
+
 // Costruisci il percorso completo del file
-$filePath = realpath($baseDirs[$type] . $_GET['file']);
+$filePath = realpath($baseDirs[$type] . $file);
 
 // Verifica che il file esista e sia all'interno della directory consentita
 if (!$filePath || strpos($filePath, realpath($baseDirs[$type])) !== 0 || !file_exists($filePath)) {
