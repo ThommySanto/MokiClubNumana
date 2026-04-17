@@ -118,6 +118,15 @@ require_once __DIR__ . "/../includes/header.php";
                 <input type="date" name="data_versamento_acconto" autocomplete="off">
             </div>
 
+            <div class="form-group">
+                <label>Ricevuta di pagamento</label>
+                <input type="file" name="ricevuta_pagamento" accept=".pdf,.jpg,.jpeg,.png"
+                    autocomplete="off">
+                <small style="display: block; margin-top: 8px; color: #9499b7;">
+                    Carica la ricevuta di pagamento in formato PDF o immagine.
+                </small>
+            </div>
+
             <!-- FIRMA -->
             <div class="signature-section" style="background: transparent; box-shadow: none; border: none; padding: 0;">
                 <label style="margin-bottom: 15px; display: block;">Firma Digitale</label>

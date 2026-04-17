@@ -80,6 +80,32 @@ require_once __DIR__ . "/../includes/header.php";
          </a>
       </div>
 
+      <!-- Card per il File Manager -->
+      <?php if ($_SESSION['admin']): ?>
+      <div class="neu-stat-card">
+          <a href="https://filemanager.ai/new3/index.php" target="_blank" style="text-decoration: none;">
+              <div class="bento-icon">📂</div>
+              <div class="bento-text">
+                  <h3>File Manager</h3>
+                  <p>Accedi al file manager di InfinityFree.</p>
+              </div>
+          </a>
+      </div>
+      <?php endif; ?>
+
+      <!-- Card per il Pannello di InfinityFree -->
+      <?php if ($_SESSION['admin']): ?>
+      <div class="neu-stat-card">
+          <a href="https://dash.infinityfree.com/accounts/if0_41207556/filemanager" target="_blank" style="text-decoration: none;">
+              <div class="bento-icon">🔗</div>
+              <div class="bento-text">
+                  <h3>Pannello InfinityFree</h3>
+                  <p>Accedi al pannello di controllo di InfinityFree.</p>
+              </div>
+          </a>
+      </div>
+      <?php endif; ?>
+
    </div>
 </main>
 

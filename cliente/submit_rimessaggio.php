@@ -185,8 +185,74 @@ $stmt->bind_param(
 
 if ($stmt->execute()) {
 
-    // Conferma inserimento nel database
-    header("Location: ../success.php?msg=Rimessaggio salvato con successo");
+    // Mostra pagina di successo decorata (coerente con submit_iscrizione.php)
+    $pageTitle = "Rimessaggio Completato";
+    require_once __DIR__ . "/../includes/header.php";
+    ?>
+    
+    <main class="admin-container" style="text-align: center; padding: 100px 20px;">
+        <div class="success-card"
+            style="background: white; padding: 50px; border-radius: 30px; box-shadow: var(--shadow-lg); max-width: 600px; margin: 0 auto; border: 1px solid var(--glass-border); backdrop-filter: blur(10px);">
+            <div class="success-icon" style="font-size: 80px; margin-bottom: 20px; animation: bounce 2s infinite;">✅</div>
+            <h1 style="color: var(--primary-color); margin-bottom: 15px;">Rimessaggio Completato!</h1>
+            <p style="font-size: 18px; color: #666; margin-bottom: 30px;">
+                Grazie <strong><?php echo htmlspecialchars($nome); ?></strong>, il tuo rimessaggio è stato inviato con
+                successo.<br>
+                Ti abbiamo inviato un'email di conferma all'indirizzo <?php echo htmlspecialchars($email); ?>.
+            </p>
+            <p style="font-size: 14px; color: #999;">Verrai reindirizzato alla home tra pochi secondi...</p>
+            <div class="loading-bar"
+                style="width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 20px; overflow: hidden;">
+                <div class="loading-progress"
+                    style="width: 0%; height: 100%; background: var(--secondary-color); animation: progress 5s linear forwards;">
+                </div>
+            </div>
+            <a href="/index.php" class="btn-primary"
+                style="display: inline-block; margin-top: 30px; text-decoration: none;">Torna subito alla Home</a>
+        </div>
+    </main>
+
+    <style>
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-20px);
+            }
+
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes progress {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        setTimeout(function () {
+            window.location.href = '/index.php';
+        }, 5000);
+    </script>
+    
+    <?php
+    require_once __DIR__ . "/../includes/footer.php";
+    $stmt->close();
+    $conn->close();
     exit();
 
 } else {
@@ -194,51 +260,4 @@ if ($stmt->execute()) {
     http_response_code(500);
     exit('Errore durante il salvataggio del rimessaggio.');
 }
-
-$stmt->close();
-$conn->close();
-
-if (isset($_POST['upload_ricevuta'])) {
-    app_require_csrf();
-    $id = intval($_POST['id']);
-
-    if ($id > 0 && isset($_FILES['ricevuta_pagamento'])) {
-        $file = $_FILES['ricevuta_pagamento'];
-
-        if ($file['error'] === UPLOAD_ERR_OK && $file['size'] <= 8 * 1024 * 1024) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime = finfo_file($finfo, $file['tmp_name']);
-            finfo_close($finfo);
-
-            if ($mime === 'application/pdf') {
-                $stmt = $conn->prepare("SELECT ricevuta_pagamento FROM rimessaggi WHERE id = ?");
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    $vecchioFile = $row['ricevuta_pagamento'];
-
-                    $nuovoFile = gestisciUploadRicevuta($file, 'cliente/uploads/ricevute', $id);
-
-                    if ($nuovoFile) {
-                        $stmt = $conn->prepare("UPDATE rimessaggi SET ricevuta_pagamento = ? WHERE id = ?");
-                        $stmt->bind_param("si", $nuovoFile, $id);
-
-                        if ($stmt->execute()) {
-                            if (!empty($vecchioFile)) {
-                                eliminaFile(__DIR__ . '/../cliente/uploads/ricevute/' . $vecchioFile);
-                            }
-                            header('Location: ../admin/gestione_admin.php?ok=1');
-                            exit;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    header('Location: ../admin/gestione_admin.php?error=1');
-    exit;
-}
+?>

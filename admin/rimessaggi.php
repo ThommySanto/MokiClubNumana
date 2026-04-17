@@ -40,71 +40,75 @@ if (isset($_POST['update'])) {
     $campi = [];
     $valori = [];
     $tipi = "";
+    $ricevuta_path = null;
+    $uploadError = null;
 
-    // Gestione caricamento ricevuta
-    if (!empty($_FILES['ricevuta_pagamento']) && $_FILES['ricevuta_pagamento']['error'] === UPLOAD_ERR_OK) {
-        $file = $_FILES['ricevuta_pagamento'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime = finfo_file($finfo, $file['tmp_name']);
-        finfo_close($finfo);
+    if (!empty($_FILES['ricevuta_pagamento']['name'])) {
+        $anno = date('Y');
+        $directory = __DIR__ . '/../cliente/uploads/ricevute/' . $anno . '/';
 
-        if ($mime === 'application/pdf') {
-            $uploadDir = creaCartellaPerAnno('cliente/uploads/ricevute');
-            $fileName = $id . '_ricevuta_' . time() . '.pdf';
-            $filePath = $uploadDir . $fileName;
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
 
-            if (move_uploaded_file($file['tmp_name'], $filePath)) {
-                chmod($filePath, 0644);
-                $relativePath = 'cliente/uploads/ricevute/' . date('Y') . '/' . $fileName;
+        $nome_base = ($rimessaggio['nome'] ?? 'rimessaggio') . '_' . ($rimessaggio['cognome'] ?? 'admin') . '_' . time() . '_' . basename($_FILES['ricevuta_pagamento']['name']);
+        $file_name = strtolower(preg_replace('/[^a-zA-Z0-9._-]+/', '_', $nome_base));
+        $target = $directory . $file_name;
 
-                // Elimina vecchio file se esiste
-                $stmt = $conn->prepare("SELECT ricevuta_pagamento FROM rimessaggi WHERE id = ?");
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                if ($result->num_rows > 0) {
-                    $oldFile = $result->fetch_assoc()['ricevuta_pagamento'];
-                    if (!empty($oldFile)) {
-                        $oldFilePath = __DIR__ . '/../' . $oldFile;
-                        if (file_exists($oldFilePath)) {
-                            unlink($oldFilePath);
-                        }
-                    }
-                }
-
-                $campi[] = "ricevuta_pagamento = ?";
-                $valori[] = $relativePath;
-                $tipi .= "s";
-            } else {
-                $errore = "Errore durante il caricamento della ricevuta.";
-            }
+        if (move_uploaded_file($_FILES['ricevuta_pagamento']['tmp_name'], $target)) {
+            $ricevuta_path = 'cliente/uploads/ricevute/' . $anno . '/' . $file_name;
         } else {
-            $errore = "Il file caricato non è un PDF valido.";
+            error_log('Errore durante il caricamento della ricevuta in admin/rimessaggi: ' . ($rimessaggio['id'] ?? 'n/a'));
+            $uploadError = 'Errore durante il caricamento della ricevuta.';
         }
     }
 
-    foreach ($_POST as $campo => $valore) {
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $campo)) {
-            continue;
+    // Se vengono modificati acconto o saldo_totale ricalcoliamo rimanente
+if (isset($_POST['acconto']) && isset($_POST['saldo_totale'])) {
+    $acconto = floatval($_POST['acconto']);
+    $saldo_totale = floatval($_POST['saldo_totale']);
+
+    $_POST['rimanente'] = $saldo_totale - $acconto;
+}
+
+    if ($uploadError) {
+        $errore = $uploadError;
+    } else {
+        foreach ($_POST as $campo => $valore) {
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $campo)) {
+                continue;
+            }
+
+            $campi[] = "$campo = ?";
+            $valori[] = $valore;
+            $tipi .= "s"; // trattiamo tutto come stringa
         }
 
-        $campi[] = "$campo = ?";
-        $valori[] = $valore;
-        $tipi .= "s";
-    }
+        if (!empty($ricevuta_path)) {
+            $campi[] = "ricevuta_pagamento = ?";
+            $valori[] = $ricevuta_path;
+            $tipi .= "s";
+        }
 
-    if (!empty($campi)) {
+        if (empty($campi)) {
+            $errore = "Nessun campo valido da aggiornare";
+        } else {
+
         $valori[] = $id;
         $tipi .= "i";
 
         $sql = "UPDATE rimessaggi SET " . implode(", ", $campi) . " WHERE id = ?";
+
         $stmt = $conn->prepare($sql);
         $stmt->bind_param($tipi, ...$valori);
 
         if ($stmt->execute()) {
-            $successo = "Rimessaggio aggiornato con successo.";
+            $successo = "Rimessaggio aggiornato con successo";
+            unset($rimessaggio);
         } else {
-            $errore = "Errore durante l'aggiornamento del rimessaggio.";
+            error_log('Errore update admin/rimessaggi: ' . $stmt->error);
+            $errore = "Errore durante l'aggiornamento";
+        }
         }
     }
 }
@@ -221,31 +225,59 @@ include "../includes/header.php";
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                     <?php
+                    $enumFields = [
+                        "tipo_documento" => ["codice fiscale", "carta identità", "patente", "passaporto"],
+                        "adulto_kid" => ["Adulto", "Kid"],
+                        "tipo_rimessaggio" => ["Settimanale", "Mensile", "Annuale"],
+                        "sacca" => ["Si", "No"]
+                    ];
+
                     foreach ($rimessaggio as $campo => $valore):
-                        if ($campo == 'id' || $campo == 'ricevuta_pagamento') {
+                        if (in_array($campo, ['id', 'created_at', 'ricevuta_pagamento']))
                             continue;
-                        }
                         ?>
                         <div class="form-group" style="margin-bottom: 20px;">
                             <label
                                 style="margin-left: 5px; color: #9499b7; font-size: 12px;"><?php echo strtoupper(str_replace('_', ' ', $campo)); ?></label>
                             <div class="neu-input" style="box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;">
-                                <input type="text" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($valore); ?>"
-                                    style="width: 100%; border: none; background: transparent; padding: 15px 20px; outline: none; color: #3d4468;">
+                                <?php if (isset($enumFields[$campo])): ?>
+                                    <select name="<?php echo $campo; ?>"
+                                        style="width: 100%; background: transparent; border: none; padding: 15px 20px; outline: none; color: #3d4468; cursor: pointer;">
+                                        <?php foreach ($enumFields[$campo] as $opzione): ?>
+                                            <option value="<?php echo $opzione; ?>" <?php if ($valore == $opzione)
+                                                   echo "selected"; ?>>
+                                                <?php echo $opzione; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php elseif (strpos($campo, 'data') !== false): ?>
+                                    <input type="date" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($valore); ?>"
+                                        style="width: 100%; border: none; background: transparent; padding: 15px 20px; outline: none; color: #3d4468;">
+                                <?php else: ?>
+                                    <input type="text" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($valore); ?>"
+                                        style="width: 100%; border: none; background: transparent; padding: 15px 20px; outline: none; color: #3d4468;">
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
+                </div>
 
-                    <!-- Campo per caricamento ricevuta -->
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label style="margin-left: 5px; color: #9499b7; font-size: 12px;">RICEVUTA PAGAMENTO</label>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="file" name="ricevuta_pagamento" accept="application/pdf">
-                            <?php if (!empty($rimessaggio['ricevuta_pagamento'])): ?>
-                                <a href="../cliente/view_file.php?type=ricevute&file=<?= urlencode($rimessaggio['ricevuta_pagamento']) ?>"
-                                   target="_blank" class="neu-button mini-btn" style="text-decoration: none;">Visualizza Ricevuta</a>
-                            <?php endif; ?>
-                        </div>
+                <div class="form-group" style="margin-top: 10px; margin-bottom: 20px;">
+                    <label style="margin-left: 5px; color: #9499b7; font-size: 12px;">RICEVUTA PAGAMENTO</label>
+                    <div class="neu-input" style="box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff; padding: 15px 20px;">
+                        <?php if (!empty($rimessaggio['ricevuta_pagamento'])): ?>
+                            <div style="margin-bottom: 12px;">
+                                <a href="/<?= htmlspecialchars($rimessaggio['ricevuta_pagamento']) ?>"
+                                    target="_blank" style="text-decoration: none; color: #3d4468; font-weight: bold;">
+                                    Visualizza ricevuta attuale
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                        <input type="file" name="ricevuta_pagamento" accept=".pdf,.jpg,.jpeg,.png"
+                            style="width: 100%; border: none; background: transparent; padding: 0; outline: none; color: #3d4468;">
+                        <small style="display: block; margin-top: 8px; color: #9499b7;">
+                            Carica un nuovo file solo se vuoi sostituire la ricevuta esistente.
+                        </small>
                     </div>
                 </div>
 
