@@ -238,6 +238,35 @@ $result = $stmt->get_result();
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
+                                <?php elseif ($campo === 'firma'): ?>
+                                    <?php
+                                    $signaturePath = trim((string) $valore);
+                                    $signatureUrl = '';
+                                    $isSignaturePathValid = preg_match('#^cliente/uploads/firme/[0-9]{4}/[a-zA-Z0-9._-]+$#', $signaturePath);
+                                    if ($signaturePath !== '' && $isSignaturePathValid) {
+                                        $signatureUrl = '/' . ltrim($signaturePath, '/');
+                                    }
+                                    ?>
+
+                                    <input type="hidden" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($signaturePath); ?>">
+
+                                    <?php if ($signatureUrl !== ''): ?>
+                                        <button type="button" class="neu-button mini-btn toggle-signature-preview"
+                                            data-signature-target="signature-preview-<?php echo (int) $iscritto['id_modulo']; ?>"
+                                            style="margin: 12px 12px 10px 12px; text-align: center; min-width: 180px;">
+                                            Visualizza Firma
+                                        </button>
+
+                                        <div id="signature-preview-<?php echo (int) $iscritto['id_modulo']; ?>"
+                                            style="display: none; margin: 4px 12px 14px 12px; padding: 14px; border-radius: 16px; background: #f5f7fb; box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;">
+                                            <img src="<?php echo htmlspecialchars($signatureUrl); ?>" alt="Firma iscrizione"
+                                                style="max-width: 100%; max-height: 220px; border-radius: 10px; border: 1px solid #d6d9e4; background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);">
+                                        </div>
+                                    <?php else: ?>
+                                        <div style="padding: 14px 12px; color: #9499b7; font-size: 13px;">
+                                            Nessuna firma disponibile da visualizzare.
+                                        </div>
+                                    <?php endif; ?>
                                 <?php elseif (strpos($campo, 'data') !== false): ?>
                                     <input type="date" name="<?php echo $campo; ?>" value="<?php echo htmlspecialchars($valore); ?>"
                                         style="width: 100%; border: none; background: transparent; padding: 15px 20px; outline: none; color: #3d4468;">
@@ -405,5 +434,22 @@ $result = $stmt->get_result();
 </div>
 
 <script src="/assets/js/bulk_email.js"></script>
+
+<script>
+    document.querySelectorAll('.toggle-signature-preview').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var targetId = button.getAttribute('data-signature-target');
+            var previewBox = document.getElementById(targetId);
+
+            if (!previewBox) {
+                return;
+            }
+
+            var isVisible = previewBox.style.display === 'block';
+            previewBox.style.display = isVisible ? 'none' : 'block';
+            button.textContent = isVisible ? 'Visualizza Firma' : 'Nascondi Firma';
+        });
+    });
+</script>
 
 <?php require_once __DIR__ . "/../includes/footer.php"; ?>
