@@ -1,0 +1,23 @@
+.auth-logo-wrap {
+    width: 60px;
+    height: 60px;
+}
+
+.auth-forgot-wrap {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.auth-forgot-link {
+    font-size: 15px;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.auth-submit-spacer {
+    margin-top: 10px;
+}
+
+.eye-closed {
+    display: none;
+}

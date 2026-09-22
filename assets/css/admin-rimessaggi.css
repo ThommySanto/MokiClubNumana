@@ -1,0 +1,325 @@
+.rimessaggi-export-btn {
+    height: 40px;
+    min-width: 180px;
+    font-size: 11px;
+    border-color: #3d4468;
+    color: #3d4468;
+}
+
+.rimessaggi-bulk-btn {
+    height: 40px;
+    min-width: 220px;
+    font-size: 11px;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.rimessaggi-btn-txt-spacing {
+    letter-spacing: 1px;
+}
+
+.rimessaggi-message-box {
+    margin-bottom: 30px;
+}
+
+.rimessaggi-link-plain {
+    text-decoration: none;
+}
+
+.rimessaggi-btn-center {
+    text-align: center;
+}
+
+.rimessaggi-edit-card {
+    max-width: 100%;
+    margin-bottom: 50px;
+    text-align: left;
+}
+
+.rimessaggi-edit-title {
+    margin-bottom: 30px;
+    color: #3d4468;
+}
+
+.rimessaggi-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.rimessaggi-form-group {
+    margin-bottom: 20px;
+}
+
+.rimessaggi-field-label {
+    margin-left: 5px;
+    color: #9499b7;
+    font-size: 12px;
+}
+
+.rimessaggi-neu-input-inset {
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+}
+
+.rimessaggi-input-control {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 15px 20px;
+    outline: none;
+    color: #3d4468;
+}
+
+.rimessaggi-select-control {
+    cursor: pointer;
+}
+
+.rimessaggi-receipt-group {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.rimessaggi-receipt-box {
+    padding: 15px 20px;
+}
+
+.rimessaggi-receipt-current-wrap {
+    margin-bottom: 12px;
+}
+
+.rimessaggi-receipt-list-title {
+    display: block;
+    color: #3d4468;
+    margin-bottom: 8px;
+}
+
+.rimessaggi-receipt-list {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.rimessaggi-receipt-list li {
+    margin-bottom: 6px;
+}
+
+.rimessaggi-receipt-link {
+    text-decoration: none;
+    color: #3d4468;
+    font-weight: bold;
+}
+
+.rimessaggi-receipt-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    outline: none;
+    color: #3d4468;
+}
+
+.rimessaggi-receipt-help {
+    display: block;
+    margin-top: 8px;
+    color: #9499b7;
+}
+
+.rimessaggi-signature-toggle-btn {
+    margin: 12px 12px 10px 12px;
+    text-align: center;
+    min-width: 180px;
+}
+
+.rimessaggi-signature-preview-box {
+    display: none;
+    margin: 4px 12px 14px 12px;
+    padding: 14px;
+    border-radius: 16px;
+    background: #f5f7fb;
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+}
+
+.rimessaggi-signature-preview-box.is-visible {
+    display: block;
+}
+
+.rimessaggi-signature-preview-img {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 10px;
+    border: 1px solid #d6d9e4;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.rimessaggi-signature-empty {
+    padding: 14px 12px;
+    color: #9499b7;
+    font-size: 13px;
+}
+
+.rimessaggi-edit-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.rimessaggi-table-title {
+    margin-bottom: 25px;
+    color: #3d4468;
+}
+
+.rimessaggi-actions-cell {
+    display: flex;
+    gap: 10px;
+}
+
+.rimessaggi-action-link {
+    text-decoration: none;
+    position: static;
+    transform: none;
+    width: 35px;
+    height: 35px;
+}
+
+.rimessaggi-pagination-wrap {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.rimessaggi-page-link {
+    min-width: 45px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.rimessaggi-bulk-modal-content {
+    max-width: 1000px;
+}
+
+.rimessaggi-bulk-title {
+    margin-bottom: 25px;
+    color: #3d4468;
+}
+
+.rimessaggi-bulk-row {
+    display: flex;
+    gap: 10px;
+}
+
+.rimessaggi-bulk-search-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    box-shadow: inset 2px 2px 5px #bec3cf, inset -2px -2px 5px #ffffff;
+}
+
+.rimessaggi-bulk-select-btn {
+    height: 40px;
+    min-width: 100px;
+    padding: 0 15px;
+    font-size: 11px;
+    border-color: #3d4468;
+    color: #3d4468;
+}
+
+.rimessaggi-bulk-attachment-input {
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+}
+
+.rimessaggi-bulk-actions-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.rimessaggi-bulk-send-btn {
+    flex: 1;
+    height: 50px;
+    min-width: 120px;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.rimessaggi-bulk-close-btn {
+    flex: 1;
+    height: 50px;
+    min-width: 120px;
+    border-color: #3d4468;
+    color: #3d4468;
+}
+
+@media (max-width: 900px) {
+    .rimessaggi-export-btn,
+    .rimessaggi-bulk-btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .rimessaggi-edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rimessaggi-edit-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .rimessaggi-edit-actions .neu-button,
+    .rimessaggi-edit-actions a {
+        width: 100%;
+    }
+
+    .rimessaggi-bulk-row,
+    .rimessaggi-bulk-actions-row {
+        flex-direction: column;
+    }
+
+    .rimessaggi-bulk-select-btn,
+    .rimessaggi-bulk-send-btn,
+    .rimessaggi-bulk-close-btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .rimessaggi-pagination-wrap {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .rimessaggi-signature-toggle-btn {
+        width: calc(100% - 24px);
+        min-width: 0;
+    }
+
+    .rimessaggi-actions-cell {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .rimessaggi-table-title,
+    .rimessaggi-edit-title {
+        text-align: center;
+    }
+}
+
+#open-bulk-email::after {
+    background-color: var(--secondary-color);
+}
+
+.button.type1[href*="export"]::after {
+    background-color: #3d4468;
+}
+
+#bulk-send-btn::after {
+    background-color: var(--secondary-color);
+}
+
+#close-bulk-modal::after,
+#bulk-select-all::after {
+    background-color: #3d4468;
+}

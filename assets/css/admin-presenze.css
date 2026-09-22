@@ -1,0 +1,704 @@
+/* ═══════════════════════════════════════════════
+   REGISTRO PRESENZE — stile neumorphism
+   Palette: #e0e5ec / #bec3cf / #ffffff
+   Accent: var(--secondary-color) = #6fb21b
+   ═══════════════════════════════════════════════ */
+
+/* ── Layout wrapper ── */
+.presenze-wrapper {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 80vh;
+}
+
+/* ── Header ── */
+.presenze-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.presenze-title-area h1 {
+    font-size: 2.8rem;
+    margin: 0;
+    color: #3d4468;
+}
+
+.presenze-title-area p {
+    color: #6c7293;
+    margin-top: 6px;
+    font-size: 15px;
+}
+
+/* ── Timbratura card ── */
+.timbratura-card {
+    background: #e0e5ec;
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 15px 15px 30px #bec3cf, -15px -15px 30px #ffffff;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.timbratura-card h2 {
+    color: #3d4468;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.timbratura-card .ora-corrente {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #3d4468;
+    letter-spacing: 2px;
+    margin: 10px 0;
+    line-height: 1;
+}
+
+.timbratura-card .data-corrente {
+    color: #9499b7;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+/* ── Stato turno badge ── */
+.stato-turno {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    background: #e0e5ec;
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+    color: #6c7293;
+}
+
+.stato-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #9499b7;
+    flex-shrink: 0;
+}
+
+.stato-turno.attivo {
+    color: var(--secondary-color);
+}
+
+.stato-turno.attivo .stato-dot {
+    background: var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+    animation: pulsa 1.5s infinite;
+}
+
+@keyframes pulsa {
+    0%, 100% { box-shadow: 0 0 6px var(--secondary-color); }
+    50%       { box-shadow: 0 0 14px var(--secondary-color); }
+}
+
+/* ── Bottoni timbratura ── */
+.timbratura-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-timbra {
+    background: #e0e5ec;
+    border: none;
+    border-radius: 20px;
+    padding: 20px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 8px 8px 20px #bec3cf, -8px -8px 20px #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #3d4468;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.btn-timbra:hover {
+    transform: translateY(-3px);
+    box-shadow: 12px 12px 30px #bec3cf, -12px -12px 30px #ffffff;
+}
+
+.btn-timbra:active {
+    transform: translateY(0);
+    box-shadow: inset 4px 4px 10px #bec3cf, inset -4px -4px 10px #ffffff;
+}
+
+.btn-timbra:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-entrata {
+    color: var(--secondary-color);
+}
+
+.btn-entrata .timbra-icon {
+    font-size: 1.5rem;
+}
+
+.btn-uscita {
+    color: #e74c3c;
+}
+
+.btn-uscita .timbra-icon {
+    font-size: 1.5rem;
+}
+
+/* ── Info geo ── */
+.geo-info {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #9499b7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.geo-info.geo-ok   { color: var(--secondary-color); }
+.geo-info.geo-err  { color: #e74c3c; }
+
+/* ── Modal nota ── */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.aperto {
+    display: flex;
+}
+
+.modal-box {
+    background: #e0e5ec;
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 20px 20px 60px #bec3cf, -20px -20px 60px #ffffff;
+    max-width: 480px;
+    width: 100%;
+    animation: fadeInUp 0.3s ease;
+}
+
+.modal-box h3 {
+    color: #3d4468;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.modal-box p {
+    color: #9499b7;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.modal-textarea {
+    width: 100%;
+    background: #e0e5ec;
+    border: none;
+    border-radius: 15px;
+    padding: 16px 20px;
+    color: #3d4468;
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    box-shadow: inset 6px 6px 12px #bec3cf, inset -6px -6px 12px #ffffff;
+    outline: none;
+    margin-bottom: 24px;
+    transition: box-shadow 0.3s;
+}
+
+.modal-textarea:focus {
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.btn-modal {
+    background: #e0e5ec;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 6px 6px 14px #bec3cf, -6px -6px 14px #ffffff;
+    color: #3d4468;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 8px 8px 20px #bec3cf, -8px -8px 20px #ffffff;
+}
+
+.btn-modal.btn-conferma {
+    color: var(--secondary-color);
+    font-weight: 800;
+}
+
+.btn-modal.btn-annulla {
+    color: #9499b7;
+}
+
+/* ── Statistiche mensili ── */
+.stats-presenze {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.stat-pres-card {
+    background: #e0e5ec;
+    padding: 28px;
+    border-radius: 25px;
+    box-shadow: 12px 12px 24px #bec3cf, -12px -12px 24px #ffffff;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-pres-card:hover {
+    transform: translateY(-4px);
+}
+
+.stat-pres-label {
+    color: #9499b7;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.stat-pres-value {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: #3d4468;
+    line-height: 1;
+}
+
+.stat-pres-value.verde {
+    color: var(--secondary-color);
+}
+
+.stat-pres-sub {
+    color: #6c7293;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+/* ── Sezione calendario / tabella ── */
+.calendario-section {
+    background: #e0e5ec;
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 15px 15px 30px #bec3cf, -15px -15px 30px #ffffff;
+    margin-bottom: 40px;
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.calendario-header h2 {
+    color: #3d4468;
+    font-size: 1.4rem;
+}
+
+/* Navigazione mese */
+.nav-mese {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-mese {
+    background: #e0e5ec;
+    border: none;
+    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 12px #bec3cf, -5px -5px 12px #ffffff;
+    color: #3d4468;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    font-weight: 700;
+}
+
+.btn-mese:hover {
+    transform: translateY(-2px);
+    box-shadow: 7px 7px 16px #bec3cf, -7px -7px 16px #ffffff;
+}
+
+.btn-mese:active {
+    box-shadow: inset 3px 3px 8px #bec3cf, inset -3px -3px 8px #ffffff;
+}
+
+.label-mese {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #3d4468;
+    min-width: 160px;
+    text-align: center;
+}
+
+/* Filtro utente */
+.filtro-utente {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-filtro {
+    background: #e0e5ec;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 4px 4px 10px #bec3cf, -4px -4px 10px #ffffff;
+    color: #9499b7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-filtro.attivo {
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+    color: #3d4468;
+}
+
+.btn-filtro[data-utente="thomas"].attivo  { color: #3498db; }
+.btn-filtro[data-utente="riccardo"].attivo { color: #e67e22; }
+.btn-filtro[data-utente="carlo"].attivo   { color: var(--secondary-color); }
+
+/* ── Tabella presenze ── */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 15px;
+}
+
+.tabella-presenze {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tabella-presenze thead th {
+    padding: 14px 16px;
+    text-align: left;
+    color: #9499b7;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 2px solid rgba(190,195,207,0.4);
+    white-space: nowrap;
+}
+
+.tabella-presenze tbody tr {
+    border-bottom: 1px solid rgba(190,195,207,0.3);
+    transition: background 0.2s;
+}
+
+.tabella-presenze tbody tr:hover {
+    background: rgba(255,255,255,0.4);
+    border-radius: 10px;
+}
+
+.tabella-presenze td {
+    padding: 14px 16px;
+    color: #3d4468;
+    vertical-align: middle;
+}
+
+.badge-utente {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #e0e5ec;
+    box-shadow: 3px 3px 6px #bec3cf, -3px -3px 6px #ffffff;
+}
+
+.badge-utente.thomas   { color: #3498db; }
+.badge-utente.riccardo { color: #e67e22; }
+.badge-utente.carlo    { color: var(--secondary-color); }
+
+.badge-tipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-tipo.entrata { color: var(--secondary-color); }
+.badge-tipo.uscita  { color: #e74c3c; }
+
+.ore-lavorate {
+    font-weight: 800;
+    color: var(--secondary-color);
+}
+
+.nota-cell {
+    color: #9499b7;
+    font-style: italic;
+    font-size: 13px;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #9499b7;
+}
+
+.empty-state .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+/* ── Export ── */
+.export-bar {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-export {
+    background: #e0e5ec;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 6px 6px 14px #bec3cf, -6px -6px 14px #ffffff;
+    color: #6c7293;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-export:hover {
+    transform: translateY(-2px);
+    box-shadow: 8px 8px 20px #bec3cf, -8px -8px 20px #ffffff;
+    color: #3d4468;
+}
+
+/* ── Notifiche toast ── */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: #e0e5ec;
+    border-radius: 15px;
+    padding: 16px 24px;
+    box-shadow: 10px 10px 25px #bec3cf, -10px -10px 25px #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3d4468;
+    animation: slideIn 0.3s ease, fadeOut 0.4s ease 2.6s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 320px;
+}
+
+.toast.success { border-left: 4px solid var(--secondary-color); }
+.toast.error   { border-left: 4px solid #e74c3c; }
+.toast.info    { border-left: 4px solid #3498db; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);   opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateX(20px); }
+}
+
+/* ── Loader spinner ── */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(111,178,27,0.2);
+    border-top-color: var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Accesso negato ── */
+.accesso-negato {
+    text-align: center;
+    padding: 80px 20px;
+    color: #9499b7;
+}
+
+.accesso-negato .icon-lock {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.accesso-negato h2 {
+    color: #3d4468;
+    margin-bottom: 10px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 992px) {
+    .presenze-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .presenze-title-area h1 {
+        font-size: 2.2rem;
+    }
+
+    .stats-presenze {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .calendario-section {
+        padding: 25px 20px;
+    }
+
+    .calendario-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .presenze-wrapper {
+        padding: 20px 15px;
+    }
+
+    .presenze-title-area h1 {
+        font-size: 1.8rem;
+    }
+
+    .timbratura-card {
+        padding: 25px 20px;
+    }
+
+    .timbratura-card .ora-corrente {
+        font-size: 2.4rem;
+    }
+
+    .timbratura-buttons {
+        flex-direction: column;
+    }
+
+    .btn-timbra {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .stats-presenze {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-pres-value {
+        font-size: 2rem;
+    }
+
+    .modal-box {
+        padding: 25px 20px;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .btn-modal {
+        width: 100%;
+        text-align: center;
+    }
+
+    .export-bar {
+        justify-content: stretch;
+    }
+
+    .btn-export {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .toast-container {
+        bottom: 15px;
+        right: 15px;
+        left: 15px;
+    }
+
+    .toast {
+        max-width: 100%;
+    }
+}

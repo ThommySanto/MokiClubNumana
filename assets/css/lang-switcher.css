@@ -1,0 +1,114 @@
+/* ==========================================================================
+   SELETTORE LINGUA — Moduli pubblici (Iscrizione / Rimessaggio)
+   Stile neumorfico coerente con form-card / neu-button
+   ========================================================================== */
+
+.lang-switcher-wrapper {
+    width: 95%;
+    max-width: 850px;
+    margin: 0 auto 24px;
+}
+
+.lang-switcher {
+    background: #e0e5ec;
+    border-radius: 24px;
+    padding: 16px 20px;
+    box-shadow:
+        10px 10px 24px #bec3cf,
+        -10px -10px 24px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.lang-switcher-label {
+    color: #3d4468;
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.lang-switcher-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.lang-switcher-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e0e5ec;
+    border: none;
+    border-radius: 14px;
+    padding: 8px 14px;
+    color: #3d4468;
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow:
+        5px 5px 12px #bec3cf,
+        -5px -5px 12px #ffffff;
+    transition: all 0.25s ease;
+}
+
+.lang-switcher-btn:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        6px 6px 16px #bec3cf,
+        -6px -6px 16px #ffffff;
+}
+
+.lang-switcher-btn:active {
+    transform: translateY(0);
+}
+
+.lang-switcher-btn.is-active {
+    color: #ffffff;
+    background: var(--secondary-color, #6fb21b);
+    box-shadow:
+        inset 3px 3px 8px rgba(0, 0, 0, 0.18),
+        inset -3px -3px 8px rgba(255, 255, 255, 0.15);
+}
+
+.lang-switcher-flag {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+.lang-switcher-code {
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .lang-switcher-wrapper {
+        width: 96%;
+        margin-bottom: 18px;
+    }
+
+    .lang-switcher {
+        padding: 14px 16px;
+        border-radius: 20px;
+        gap: 10px;
+        box-shadow:
+            6px 6px 16px #bec3cf,
+            -6px -6px 16px #ffffff;
+    }
+
+    .lang-switcher-label {
+        width: 100%;
+        text-align: center;
+    }
+
+    .lang-switcher-btn {
+        padding: 7px 11px;
+        font-size: 0.8rem;
+    }
+}

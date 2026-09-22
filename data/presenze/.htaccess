@@ -1,0 +1,3 @@
+# Blocca accesso diretto al CSV delle presenze
+Order deny,allow
+Deny from all

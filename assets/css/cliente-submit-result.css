@@ -1,0 +1,92 @@
+@keyframes cliente-submit-bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-20px);
+    }
+
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes cliente-submit-progress {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.cliente-submit-main {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.cliente-submit-card {
+    background: white;
+    padding: 50px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+.cliente-submit-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: cliente-submit-bounce 2s infinite;
+}
+
+.cliente-submit-title {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.cliente-submit-message {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.cliente-submit-subtitle {
+    font-size: 14px;
+    color: #999;
+}
+
+.cliente-submit-loading-bar {
+    width: 100%;
+    height: 4px;
+    background: #eee;
+    border-radius: 2px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.cliente-submit-loading-progress {
+    width: 0%;
+    height: 100%;
+    background: var(--secondary-color);
+    animation: cliente-submit-progress 5s linear forwards;
+}
+
+.cliente-submit-link {
+    display: inline-block;
+    margin-top: 30px;
+    text-decoration: none;
+}
+
+.cliente-submit-error-box {
+    margin: 50px auto;
+    max-width: 600px;
+}

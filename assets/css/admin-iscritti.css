@@ -1,0 +1,276 @@
+.iscritti-export-btn {
+    height: 40px;
+    min-width: 180px;
+    font-size: 11px;
+    border-color: #3d4468;
+    color: #3d4468;
+}
+
+.iscritti-bulk-btn {
+    height: 40px;
+    min-width: 220px;
+    font-size: 11px;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.iscritti-btn-txt-spacing {
+    letter-spacing: 1px;
+}
+
+#open-bulk-email::after {
+    background-color: var(--secondary-color);
+}
+
+.button.type1[href*="export"]::after {
+    background-color: #3d4468;
+}
+
+#bulk-send-btn::after {
+    background-color: var(--secondary-color);
+}
+
+#close-bulk-modal::after,
+#bulk-select-all::after {
+    background-color: #3d4468;
+}
+
+.iscritti-message-box {
+    margin-bottom: 30px;
+}
+
+.iscritti-link-plain {
+    text-decoration: none;
+}
+
+.iscritti-btn-center {
+    text-align: center;
+}
+
+.iscritti-edit-card {
+    max-width: 100%;
+    margin-bottom: 50px;
+    text-align: left;
+}
+
+.iscritti-edit-title {
+    margin-bottom: 30px;
+    color: #3d4468;
+}
+
+.iscritti-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.iscritti-form-group {
+    margin-bottom: 20px;
+}
+
+.iscritti-field-label {
+    margin-left: 5px;
+    color: #9499b7;
+    font-size: 12px;
+}
+
+.iscritti-neu-input-inset {
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+}
+
+.iscritti-input-control {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 15px 20px;
+    outline: none;
+    color: #3d4468;
+}
+
+.iscritti-select-control {
+    cursor: pointer;
+}
+
+.iscritti-signature-toggle-btn {
+    margin: 12px 12px 10px 12px;
+    text-align: center;
+    min-width: 180px;
+}
+
+.iscritti-signature-preview-box {
+    display: none;
+    margin: 4px 12px 14px 12px;
+    padding: 14px;
+    border-radius: 16px;
+    background: #f5f7fb;
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+}
+
+.iscritti-signature-preview-box.is-visible {
+    display: block;
+}
+
+.iscritti-signature-preview-img {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 10px;
+    border: 1px solid #d6d9e4;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.iscritti-signature-empty {
+    padding: 14px 12px;
+    color: #9499b7;
+    font-size: 13px;
+}
+
+.iscritti-edit-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.iscritti-table-title {
+    margin-bottom: 25px;
+    color: #3d4468;
+}
+
+.iscritti-actions-cell {
+    display: flex;
+    gap: 10px;
+}
+
+.iscritti-action-link {
+    text-decoration: none;
+    position: static;
+    transform: none;
+    width: 35px;
+    height: 35px;
+}
+
+.iscritti-pagination-wrap {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.iscritti-page-link {
+    min-width: 45px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.iscritti-bulk-modal-content {
+    max-width: 1000px;
+}
+
+.iscritti-bulk-title {
+    margin-bottom: 25px;
+    color: #3d4468;
+}
+
+.iscritti-bulk-row {
+    display: flex;
+    gap: 10px;
+}
+
+.iscritti-bulk-search-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    box-shadow: inset 2px 2px 5px #bec3cf, inset -2px -2px 5px #ffffff;
+}
+
+.iscritti-bulk-select-btn {
+    height: 40px;
+    min-width: 100px;
+    padding: 0 15px;
+    font-size: 11px;
+    border-color: #3d4468;
+    color: #3d4468;
+}
+
+.iscritti-bulk-attachment-input {
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+}
+
+.iscritti-bulk-actions-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.iscritti-bulk-send-btn {
+    flex: 1;
+    height: 50px;
+    min-width: 120px;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.iscritti-bulk-close-btn {
+    flex: 1;
+    height: 50px;
+    min-width: 120px;
+    border-color: #3d4468;
+    color: #3d4468;
+}
+
+@media (max-width: 900px) {
+    .iscritti-export-btn,
+    .iscritti-bulk-btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .iscritti-edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .iscritti-edit-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .iscritti-edit-actions .neu-button,
+    .iscritti-edit-actions a {
+        width: 100%;
+    }
+
+    .iscritti-bulk-row,
+    .iscritti-bulk-actions-row {
+        flex-direction: column;
+    }
+
+    .iscritti-bulk-select-btn,
+    .iscritti-bulk-send-btn,
+    .iscritti-bulk-close-btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .iscritti-pagination-wrap {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .iscritti-signature-toggle-btn {
+        width: calc(100% - 24px);
+        min-width: 0;
+    }
+
+    .iscritti-actions-cell {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .iscritti-table-title,
+    .iscritti-edit-title {
+        text-align: center;
+    }
+}

@@ -1,0 +1,100 @@
+.cliente-privacy-note {
+    font-size: smaller;
+}
+
+.cliente-signature-section {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
+.cliente-signature-label {
+    margin-bottom: 15px;
+    display: block;
+}
+
+.cliente-signature-preview-hidden {
+    display: none;
+}
+
+.cliente-signature-modal-title {
+    color: #3d4468;
+    margin-bottom: 10px;
+}
+
+.cliente-signature-modal-subtitle {
+    color: #9499b7;
+    font-size: 14px;
+}
+
+.cliente-signature-actions-row {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.cliente-signature-action-btn {
+    width: auto !important;
+    padding: 15px 40px !important;
+}
+
+.cliente-signature-close-btn {
+    background: #9499b7;
+    color: white;
+}
+
+.cliente-signature-uploaded-row {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cliente-signature-uploaded-label {
+    color: #3d4468;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.cliente-link-plain {
+    text-decoration: none;
+}
+
+.cliente-inline-flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.cliente-eye-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.cliente-form-submit-btn {
+    width: 100%;
+    margin-top: 40px;
+}
+
+.cliente-receipt-help {
+    display: block;
+    margin-top: 8px;
+    color: #9499b7;
+}
+
+@media (max-width: 600px) {
+    .cliente-signature-actions-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cliente-signature-action-btn {
+        width: 100% !important;
+        padding: 14px 16px !important;
+        min-height: 44px;
+    }
+
+    .cliente-signature-uploaded-row {
+        flex-wrap: wrap;
+    }
+}

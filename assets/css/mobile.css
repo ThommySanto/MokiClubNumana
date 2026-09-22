@@ -1,0 +1,1167 @@
+/* ==========================================================================
+   MOBILE.CSS — Moki Club Numana
+   Responsive + Hamburger Menu
+   Desktop nav: visibile sopra 768px
+   Mobile nav: hamburger + drawer sotto 768px
+   ========================================================================== */
+
+/* ==========================================================================
+   1. BASE
+   ========================================================================== */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ==========================================================================
+   2. HAMBURGER BUTTON — nascosto su desktop, visibile su mobile
+   ========================================================================== */
+.nav-hamburger {
+  display: none; /* nascosto su desktop */
+}
+
+/* ==========================================================================
+   3. NAV DESKTOP — visibile su desktop, nascosto su mobile
+   ========================================================================== */
+.nav-desktop {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ==========================================================================
+   4. DRAWER MOBILE — sempre fuori schermo di default
+   ========================================================================== */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-overlay.is-visible {
+  display: block;
+  opacity: 1;
+}
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 260px;
+  max-width: 80vw;
+  height: 100%;
+  background: #111111;
+  z-index: 1200;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+}
+
+.nav-drawer.is-open {
+  transform: translateX(0);
+}
+
+.nav-drawer-inner {
+  padding: 80px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-drawer-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  color: #ffffff !important;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-drawer-link:hover,
+.nav-drawer-link:active {
+  background: rgba(111, 178, 27, 0.15);
+  border-color: rgba(111, 178, 27, 0.4);
+  color: #6fb21b !important;
+}
+
+.nav-drawer-link--danger:hover,
+.nav-drawer-link--danger:active {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444 !important;
+}
+
+.nav-drawer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+}
+
+.nav-drawer-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Blocca lo scroll del body quando il menu è aperto */
+body.nav-open {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   5. MEDIA QUERY — sotto 768px
+   ========================================================================== */
+@media (max-width: 768px) {
+
+  /* ── Header ── */
+  .site-header {
+    padding: 0;
+    min-height: 58px;
+    display: block;
+  }
+
+  .header-container {
+    width: 100%;
+    padding: 0 16px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+
+  /* Nasconde la nav desktop */
+  .nav-desktop {
+    display: none !important;
+  }
+
+  /* ── Logo ── */
+  .logo-area {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .logo-area a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .logo {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .site-name {
+    font-size: 14px;
+    font-weight: 900;
+    font-family: "Montserrat", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+  }
+
+  /* ── Hamburger ── */
+  .nav-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s ease;
+  }
+
+  .nav-hamburger:active {
+    background: rgba(111, 178, 27, 0.2);
+  }
+
+  .hamburger-bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    transform-origin: center;
+  }
+
+  /* Animazione X quando aperto */
+  .nav-hamburger.is-open .hamburger-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav-hamburger.is-open .hamburger-bar:nth-child(2) {
+    opacity: 0;
+    width: 0;
+  }
+  .nav-hamburger.is-open .hamburger-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ── Touch targets minimi ── */
+  a, button, input[type="submit"], input[type="button"], .button, select {
+    min-height: 44px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    height: auto;
+    min-height: 380px;
+    padding: 50px 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 1.9rem;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+
+  .hero-content p {
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    padding: 0 10px;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .button.type1 {
+    min-width: 100%;
+    width: 100%;
+    height: 52px;
+    padding: 0 20px;
+  }
+
+  .button.type1 .btn-txt {
+    letter-spacing: 2px;
+    font-size: 12px;
+  }
+
+  /* ── Contatti ── */
+  .contact-section {
+    padding: 50px 12px;
+  }
+
+  .contact-section-title {
+    font-size: 1.4rem;
+  }
+
+  .contact-card {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+
+  .contact-info-panel {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 30px 20px;
+    gap: 20px;
+  }
+
+  .contact-map-panel iframe {
+    min-height: 260px;
+  }
+
+  .contact-social-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .contact-social-btn {
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+
+  /* ── Form card ── */
+  .form-wrapper {
+    padding: 40px 0;
+  }
+
+  .form-card {
+    padding: 35px 20px;
+    border-radius: 25px;
+    width: 96%;
+    box-shadow:
+      10px 10px 30px #bec3cf,
+      -10px -10px 30px #ffffff;
+  }
+
+  .form-title {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+    line-height: 1.2;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    margin: 30px 0 15px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-row-dati-anagrafici {
+    grid-template-columns: 1fr;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="password"],
+  input[data-date-it],
+  select,
+  textarea {
+    padding: 15px 18px;
+    font-size: 16px;
+    border-radius: 15px;
+    margin-bottom: 18px;
+  }
+
+  .phone-input-container {
+    border-radius: 15px;
+    margin-bottom: 18px;
+  }
+
+  .input-tel {
+    padding: 15px 18px !important;
+    font-size: 16px !important;
+  }
+
+  .checkbox-group label.container {
+    padding: 15px 18px;
+    font-size: 14px;
+    gap: 12px;
+  }
+
+  .signature-section {
+    padding: 20px 15px;
+  }
+
+  .signature-canvas,
+  #signature-pad {
+    height: 200px !important;
+  }
+
+  /* ── Signature modal ── */
+  .signature-modal {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .modal-content-neu {
+    width: 100%;
+    max-width: 100%;
+    padding: 25px 15px 30px;
+    border-radius: 30px 30px 20px 20px;
+    box-shadow:
+      15px 15px 30px #bec3cf,
+      -15px -15px 30px #ffffff;
+  }
+
+  .modal-signature-pad {
+    height: 280px;
+    max-height: 50vh;
+    margin: 15px 0 20px;
+  }
+
+  .cliente-signature-actions-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cliente-signature-action-btn {
+    width: 100% !important;
+    padding: 15px 16px !important;
+    min-height: 50px;
+  }
+
+  /* ── Admin dashboard bento ── */
+  .admin-dashboard-wrapper {
+    padding: 20px 12px;
+  }
+
+  .admin-dashboard-bento {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .bento-card {
+    grid-column: span 1 !important;
+    padding: 25px 20px;
+    border-radius: 20px;
+  }
+
+  .bento-iscritti {
+    grid-column: span 2 !important;
+  }
+
+  .bento-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+    border-radius: 15px;
+    margin-bottom: 14px;
+  }
+
+  .bento-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .db-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 25px;
+  }
+
+  .db-title-area h1 {
+    font-size: 2rem;
+  }
+
+  /* ── Admin stats ── */
+  .stats-overview {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 25px;
+  }
+
+  .neu-stat-card {
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow:
+      8px 8px 16px #bec3cf,
+      -8px -8px 16px #ffffff;
+  }
+
+  .stat-value {
+    font-size: 2.8rem;
+  }
+
+  /* ── Admin toolbar ── */
+  .admin-toolbar-header,
+  .db-header-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .admin-title-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .admin-top-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .admin-top-actions .button.type1,
+  .admin-top-actions a.button.type1 {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+  }
+
+  /* ── Search form ── */
+  .search-form-neu {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow:
+      10px 10px 20px #bec3cf,
+      -10px -10px 20px #ffffff;
+  }
+
+  .search-form-neu input[type="text"],
+  .search-form-neu select {
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 0;
+  }
+
+  .search-form-neu .mini-btn {
+    width: 100%;
+    height: 48px;
+    margin: 0 !important;
+    border-radius: 15px;
+  }
+
+  /* ── Admin tables → cards ── */
+  .admin-table,
+  .admin-table thead,
+  .admin-table tbody,
+  .admin-table th,
+  .admin-table td,
+  .admin-table tr {
+    display: block;
+  }
+
+  .admin-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .admin-table tr {
+    border: 1px solid #eee;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  .admin-table td {
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+    padding: 12px 15px 12px 50%;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: right;
+    font-size: 0.85rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-table td:last-child { border-bottom: none; }
+
+  .admin-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    padding-right: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 700;
+    text-align: left;
+    color: var(--primary-color);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  .admin-table-neu,
+  .admin-table-neu thead,
+  .admin-table-neu tbody,
+  .admin-table-neu th,
+  .admin-table-neu td,
+  .admin-table-neu tr {
+    display: block;
+  }
+
+  .admin-table-neu thead { display: none; }
+
+  .admin-table-neu tr {
+    margin-bottom: 16px;
+    box-shadow:
+      6px 6px 12px #bec3cf,
+      -6px -6px 12px #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #e0e5ec;
+  }
+
+  .admin-table-neu td {
+    display: block;
+    text-align: left;
+    padding: 12px 15px;
+    border: none;
+    border-bottom: 1px solid rgba(190, 195, 207, 0.25);
+    font-size: 14px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-table-neu td:last-child { border-bottom: none; }
+
+  .admin-table-neu td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    color: #9499b7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .admin-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 4px;
+  }
+
+  .admin-actions a {
+    padding: 8px 14px;
+    font-size: 11px;
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  /* Status colori card */
+  .admin-table tr.status-paid,
+  .admin-table-neu tr.status-paid   { border-left: 4px solid #2ecc71; }
+  .admin-table tr.status-partial,
+  .admin-table-neu tr.status-partial{ border-left: 4px solid #ff9800; }
+  .admin-table tr.status-unpaid,
+  .admin-table-neu tr.status-unpaid { border-left: 4px solid #e74c3c; }
+
+  /* ── Neu table card ── */
+  .neu-table-card {
+    padding: 16px;
+    border-radius: 20px;
+    box-shadow:
+      10px 10px 20px #bec3cf,
+      -10px -10px 20px #ffffff;
+  }
+
+  /* ── Bulk email modal ── */
+  .bulk-modal-grid {
+    grid-template-columns: 1fr;
+    max-height: 65vh;
+    gap: 20px;
+  }
+
+  .composition-panel {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid rgba(190, 195, 207, 0.4);
+    padding-top: 20px;
+  }
+
+  .user-selection-list {
+    max-height: 200px;
+  }
+
+  /* ── Iscritti edit ── */
+  .iscritti-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .iscritti-export-btn,
+  .iscritti-bulk-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* ── Legal pages ── */
+  .legal-page-wrapper { padding: 30px 12px 50px; }
+  .legal-page-header  { padding: 30px 20px 24px; }
+  .legal-page-title   { font-size: 1.5rem; letter-spacing: 1px; }
+  .legal-page-content { padding: 30px 20px; }
+
+  /* ── Messages ── */
+  .success-message,
+  .error-message {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+
+  /* ── Overflow prevention ── */
+  .admin-container,
+  .admin-dashboard-wrapper,
+  .form-wrapper {
+    overflow-x: hidden;
+  }
+
+  .table-container,
+  .neu-table-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+
+  /* ── Registro Presenze ── */
+  .presenze-wrapper {
+    padding: 20px 12px;
+    overflow-x: hidden;
+  }
+
+  .presenze-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .presenze-title-area h1 {
+    font-size: 2rem;
+  }
+
+  .presenze-title-area p {
+    font-size: 14px;
+  }
+
+  /* Cartellino */
+  .timbratura-card {
+    padding: 28px 20px;
+    border-radius: 24px;
+    margin-bottom: 24px;
+  }
+
+  .timbratura-card .ora-corrente {
+    font-size: 2.6rem;
+    letter-spacing: 1px;
+  }
+
+  .timbratura-card .data-corrente {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .stato-turno {
+    font-size: 13px;
+    padding: 8px 18px;
+    margin-bottom: 22px;
+  }
+
+  .timbratura-buttons {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .btn-timbra {
+    width: 100%;
+    min-width: unset;
+    padding: 18px 20px;
+    font-size: 15px;
+    border-radius: 16px;
+    min-height: 56px;
+  }
+
+  .geo-info {
+    font-size: 12px;
+    margin-top: 14px;
+  }
+
+  /* Statistiche */
+  .stats-presenze {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .stat-pres-card {
+    padding: 20px 15px;
+    border-radius: 20px;
+  }
+
+  .stat-pres-value {
+    font-size: 2rem;
+  }
+
+  /* Calendario */
+  .calendario-section {
+    padding: 24px 16px;
+    border-radius: 24px;
+    margin-bottom: 24px;
+  }
+
+  .calendario-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .calendario-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .nav-mese {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .label-mese {
+    font-size: 1rem;
+    min-width: unset;
+    flex: 1;
+  }
+
+  .btn-mese {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+
+  .filtro-utente {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .btn-filtro {
+    width: 100%;
+    text-align: center;
+    padding: 10px 8px;
+    font-size: 11px;
+    min-height: 44px;
+  }
+
+  /* Tabella presenze → card su mobile */
+  .tabella-presenze,
+  .tabella-presenze thead,
+  .tabella-presenze tbody,
+  .tabella-presenze th,
+  .tabella-presenze td,
+  .tabella-presenze tr {
+    display: block;
+  }
+
+  .tabella-presenze thead { display: none; }
+
+  .tabella-presenze tbody tr {
+    margin-bottom: 14px;
+    border-radius: 18px;
+    border-bottom: none;
+    background: #e0e5ec;
+    box-shadow:
+      6px 6px 14px #bec3cf,
+      -6px -6px 14px #ffffff;
+    overflow: hidden;
+    padding: 4px 0;
+  }
+
+  .tabella-presenze tbody tr:hover {
+    background: #e0e5ec;
+  }
+
+  .tabella-presenze td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(190,195,207,0.25);
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .tabella-presenze td:last-child {
+    border-bottom: none;
+  }
+
+  .tabella-presenze td::before {
+    content: attr(data-label);
+    font-size: 10px;
+    font-weight: 800;
+    color: #9499b7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+
+  .nota-cell {
+    max-width: 160px;
+  }
+
+  /* Export bar */
+  .export-bar {
+    justify-content: stretch;
+    margin-top: 16px;
+  }
+
+  .btn-export {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    min-height: 48px;
+  }
+
+  /* Modal nota */
+  .modal-overlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .modal-box {
+    padding: 28px 20px;
+    border-radius: 24px 24px 18px 18px;
+    max-width: 100%;
+  }
+
+  .modal-box h3 {
+    font-size: 1.2rem;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-modal {
+    width: 100%;
+    text-align: center;
+    min-height: 48px;
+    padding: 14px 20px;
+  }
+
+  /* Toast */
+  .toast-container {
+    bottom: 16px;
+    right: 12px;
+    left: 12px;
+  }
+
+  .toast {
+    max-width: 100%;
+    font-size: 13px;
+    padding: 14px 16px;
+  }
+
+/* ==========================================================================
+   6. MEDIA QUERY — sotto 480px
+   ========================================================================== */
+@media (max-width: 480px) {
+
+  .hero {
+    min-height: 340px;
+    padding: 40px 16px;
+  }
+
+  .hero-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .form-card {
+    padding: 25px 14px;
+    border-radius: 20px;
+    width: 98%;
+  }
+
+  .form-title {
+    font-size: 1.35rem;
+  }
+
+  /* ── Registro Presenze 480px ── */
+  .presenze-title-area h1 {
+    font-size: 1.7rem;
+  }
+
+  .timbratura-card .ora-corrente {
+    font-size: 2.2rem;
+  }
+
+  .stats-presenze {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-pres-value {
+    font-size: 1.8rem;
+  }
+
+  .filtro-utente {
+    grid-template-columns: 1fr 1fr;
+  }
+
+
+  .admin-dashboard-bento {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .bento-card,
+  .bento-iscritti {
+    grid-column: span 1 !important;
+  }
+
+  .db-title-area h1 {
+    font-size: 1.7rem;
+  }
+
+  .login-card {
+    padding: 35px 20px;
+    border-radius: 24px;
+    box-shadow:
+      12px 12px 30px #bec3cf,
+      -12px -12px 30px #ffffff;
+  }
+
+  .login-card:hover {
+    transform: none;
+  }
+
+  .login-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .neu-icon {
+    width: 65px;
+    height: 65px;
+  }
+
+  .bulk-progress-container {
+    left: 10px;
+    right: 10px;
+    width: auto;
+    top: 10px;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .site-footer {
+    padding: 20px 15px;
+    font-size: 13px;
+  }
+
+  #cookie-banner {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+/* ==========================================================================
+   7. LANDSCAPE MODAL
+   ========================================================================== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .signature-modal {
+    align-items: center;
+  }
+
+  .modal-content-neu {
+    padding: 12px 20px;
+    border-radius: 20px;
+    max-width: 95%;
+  }
+
+  .modal-signature-pad {
+    height: 160px !important;
+    max-height: 45vh;
+    margin: 8px 0 12px;
+  }
+}
+
+/* ==========================================================================
+   8. TOUCH DEVICE — disabilita hover transform (evita stato bloccato su iOS)
+   ========================================================================== */
+@media (hover: none) and (pointer: coarse) {
+  .bento-card:hover {
+    transform: none;
+    box-shadow: 15px 15px 30px #bec3cf, -15px -15px 30px #ffffff;
+    background: #e0e5ec;
+  }
+
+  .neu-stat-card:hover,
+  .login-card:hover {
+    transform: none;
+  }
+
+  .checkbox-group label.container:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-timbra:hover,
+  .btn-mese:hover,
+  .btn-filtro:hover,
+  .btn-export:hover,
+  .stat-pres-card:hover {
+    transform: none;
+    box-shadow: 8px 8px 20px #bec3cf, -8px -8px 20px #ffffff;
+  }
+
+  .btn-timbra:active {
+    transform: scale(0.97);
+    box-shadow: inset 4px 4px 10px #bec3cf, inset -4px -4px 10px #ffffff;
+  }
+
+
+  .bento-card:active {
+    transform: scale(0.98);
+    box-shadow: inset 8px 8px 16px #bec3cf, inset -8px -8px 16px #ffffff;
+  }
+
+  .button.type1:active {
+    transform: scale(0.97);
+  }
+}
+
+/* ==========================================================================
+   9. SAFE AREA — iPhone notch / Dynamic Island
+   ========================================================================== */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .site-header {
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .site-footer {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .signature-modal {
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
+  }
+
+  .toast-container {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+
+  .nav-drawer {
+    padding-top: env(safe-area-inset-top);
+  }
+}

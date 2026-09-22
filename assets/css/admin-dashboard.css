@@ -1,0 +1,202 @@
+/* Stili specifici per il layout della dashboard che non sono nel CSS globale */
+.admin-dashboard-wrapper {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 80vh;
+}
+
+.db-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.db-title-area h1 {
+    font-size: 2.8rem;
+    margin: 0;
+    color: #3d4468;
+}
+
+.green-dot {
+    color: var(--secondary-color);
+}
+
+.db-status-badge {
+    padding: 10px 20px;
+    background: #e0e5ec;
+    border-radius: 50px;
+    box-shadow: inset 4px 4px 8px #bec3cf, inset -4px -4px 8px #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    color: #6c7293;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--secondary-color);
+}
+
+.stats-overview {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.neu-stat-card {
+    background: #e0e5ec;
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: 15px 15px 30px #bec3cf, -15px -15px 30px #ffffff;
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.neu-stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-label {
+    color: #9499b7;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #3d4468;
+    margin: 10px 0;
+    line-height: 1;
+}
+
+.stat-trend {
+    color: #6c7293;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.stat-trend.positive {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.bento-iscritti,
+.bento-rimessaggi {
+    grid-column: span 6 !important;
+    flex-direction: row !important;
+    gap: 30px;
+    text-align: left !important;
+    justify-content: flex-start !important;
+}
+
+.bento-utility-grid {
+    grid-column: span 12 !important;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 10px;
+}
+
+.mini-bento {
+    padding: 25px !important;
+    border-radius: 25px !important;
+    flex-direction: column !important;
+}
+
+.bento-icon-small {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.mini-bento span {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #3d4468;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-filemanager-link {
+    text-decoration: none;
+}
+
+@media (max-width: 992px) {
+    .db-header-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .db-title-area h1 {
+        font-size: 2.2rem;
+    }
+
+    .stats-overview {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .stat-value {
+        font-size: 2.8rem;
+    }
+
+    .bento-iscritti,
+    .bento-rimessaggi {
+        grid-column: span 12 !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 30px 20px !important;
+    }
+
+    .bento-icon {
+        margin-bottom: 15px;
+    }
+
+    .bento-utility-grid {
+        grid-column: span 12 !important;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .db-title-area h1 {
+        font-size: 1.8rem;
+    }
+
+    .db-title-area p {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .admin-dashboard-wrapper {
+        padding: 20px 15px;
+    }
+
+    .neu-stat-card {
+        padding: 20px;
+    }
+
+    .bento-card {
+        border-radius: 20px;
+        padding: 24px 18px;
+    }
+
+    .bento-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .bento-card p {
+        font-size: 0.9rem;
+    }
+}

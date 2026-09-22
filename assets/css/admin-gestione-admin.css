@@ -1,0 +1,121 @@
+.gestione-admin-message-box {
+    margin-bottom: 30px;
+}
+
+.gestione-admin-stack-form {
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}
+
+.gestione-admin-row-gap-10 {
+    display: flex;
+    gap: 10px;
+}
+
+.gestione-admin-flex-1 {
+    flex: 1;
+}
+
+.gestione-admin-link-plain {
+    text-decoration: none;
+}
+
+.gestione-admin-btn-center {
+    text-align: center;
+}
+
+.gestione-admin-edit-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #9499b7;
+    font-style: italic;
+}
+
+.gestione-admin-table-card {
+    margin-top: 50px;
+}
+
+.gestione-admin-table-title {
+    margin-bottom: 25px;
+    color: #3d4468;
+}
+
+.gestione-admin-actions-header {
+    text-align: right;
+}
+
+.gestione-admin-username {
+    color: #3d4468;
+}
+
+.gestione-admin-root-badge {
+    font-size: 10px;
+    background: var(--secondary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.gestione-admin-actions-cell {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.gestione-admin-action-link {
+    text-decoration: none;
+    position: static;
+    transform: none;
+    width: 35px;
+    height: 35px;
+}
+
+.gestione-admin-protected {
+    color: #9499b7;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-management-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.management-inner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    align-items: start;
+}
+
+.edit-account-panel {
+    border-left: 1px solid rgba(190, 195, 207, 0.5);
+    padding-left: 30px;
+}
+
+@media (max-width: 768px) {
+    .management-inner-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-account-panel {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid rgba(190, 195, 207, 0.5);
+        padding-top: 30px;
+    }
+
+    .search-form-neu input[type="password"] {
+        width: 100%;
+    }
+
+    .gestione-admin-row-gap-10 {
+        flex-direction: column;
+    }
+}
